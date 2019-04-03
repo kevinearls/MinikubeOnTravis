@@ -13,4 +13,6 @@ cache:
 services:
   - docker
 
-before_install: ./create-minikube.sh
+before_install:
+  - chmod +x ./create-minikube.sh
+  - ./create-minikube.sh
