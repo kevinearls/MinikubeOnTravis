@@ -13,10 +13,4 @@ cache:
 services:
   - docker
 
-before_install:
-  - export PATH=$PATH:$HOME/.local/bin
-  -
-jobs:
-  include:
-  - stage: Sanity
-  - script: ./create-minikube.sh
+before_install: ./create-minikube.sh
