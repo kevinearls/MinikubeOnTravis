@@ -35,8 +35,8 @@
   minikube config set WantNoneDriverWarning false
   minikube config set vm-driver none
 
-  minikube version
-  sudo minikube start --kubernetes-version=$KUBERNETES_VERSION --extra-config=apiserver.authorization-mode=RBAC
+minikube version
+sudo minikube start --kubernetes-version=$KUBERNETES_VERSION
 sudo chown -R travis: /home/travis/.minikube/
 
   minikube update-context
