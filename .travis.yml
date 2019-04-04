@@ -34,6 +34,7 @@ script:
   #- JSONPATH='{range .items[*]}{@.metadata.name}:{range @.status.conditions[*]}{@.type}={@.status};{end}{end}'; until kubectl -n default get pods -lapp=travis-example -o jsonpath="$JSONPATH" 2>&1 | grep -q "Ready=True"; do sleep 1;echo "waiting for travis-example deployment to be available"; kubectl get pods -n default; done
   #
   # TODO
+  # 0. Install operator SDK
   # 1. Setup operator
   # 2. Install ES (and Cassandra?)
   #    Wait for it to be ready
@@ -41,5 +42,14 @@ script:
   #    Wait for it to be ready
   # 4.  Do several gets from url....how do I find it?
   - ./scripts/setupOperator.sh
+  - kubectl create namespace storage
+  - kubectl create --namespace storage --filename https://raw.githubusercontent.com/jaegertracing/jaeger-operator/master/test/elasticsearch.yml
+  - JSONPATH='{range .items[*]}{@.metadata.name}:{range @.status.conditions[*]}{@.type}={@.status};{end}{end}'; until kubectl --namespace storage get pods --selector='app=jaeger-elasticsearch' --output jsonpath="$JSONPATH" 2>&1 | grep --quiet "Ready=True"; do sleep 5;echo "waiting for elasticsearch deployment to be available"; kubectl get pods --namespace storage; done
+  # install simple-prod
+  - kubectl create --namespace storage --filename https://raw.githubusercontent.com/jaegertracing/jaeger-operator/master/deploy/examples/simple-prod.yaml
+  - until kubectl --namespace storage get deployment simple-prod-query --output=jsonpath='{.status.readyReplicas}' | grep --quiet 1; do sleep 1;echo "waiting for travis-example deployment to be available"; kubectl get deployments --namespace storage; done
+  - curl $(minikube ip)/api/services
+  - curl $(minikube ip)/api/services
+
 
 
