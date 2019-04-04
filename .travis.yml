@@ -18,10 +18,10 @@ jobs:
       script:
         - "echo 'This is the build stage'"
         - "ls -alF"
-        - "ls -alF .travis"
-        - "chmod +x ./travis/installOperator.sh"
-        - "chmod +x ./travis/rune2eTests.sh"
-        - "chmod +x ./travis/setupMinikube.sh"
+        - "ls -alF ./.travis"
+        - "chmod +x ./.travis/installOperator.sh"
+        - "chmod +x ./.travis/rune2eTests.sh"
+        - "chmod +x ./.travis/setupMinikube.sh"
     - stage: e2e
       env:
         global:
@@ -34,6 +34,6 @@ jobs:
       install:
         - "./.travis/setupMinikube.sh"
       script:
-        - "./travis/rune2eTests.sh"
+        - "./.travis/rune2eTests.sh"
     - stage: deploy
       script: "echo 'This is the deploy stage'"
