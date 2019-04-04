@@ -18,6 +18,7 @@ before_script:
   - mkdir -p $HOME/.kube $HOME/.minikube
   - touch $KUBECONFIG
   - sudo minikube start --vm-driver=none --kubernetes-version=v1.13.0
+  - id
   - "sudo chown -R travis: /home/travis/.minikube/"
   - sudo minikube addons enable ingress
 
@@ -48,6 +49,7 @@ script:
   - kubectl get all --all-namespaces
   - kubectl get ingress --all-namespaces
   - minikube ip
+  - sleep 30
   - curl $(minikube ip)/api/services
   - curl $(minikube ip)/api/services
   - ls -alF
