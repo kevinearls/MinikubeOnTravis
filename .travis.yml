@@ -55,9 +55,3 @@ script:
   - curl $(minikube ip)/api/services --output fud.txt
   - ls -alF
   - grep jaeger-query fud.txt
-
-
-
-
-
-  {"data":[""],"total":1,"limit":0,"offset":0,"errors":null}
