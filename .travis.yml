@@ -34,6 +34,7 @@ jobs:
         - "chmod +x ./.travis/rune2eTests.sh"
         - "chmod +x ./.travis/setupMinikube.sh"
         - "./.travis/setupMinikube.sh"
+        - "./.travis/rune2eTests.sh"
       script:
         - "./.travis/rune2eTests.sh"
 
