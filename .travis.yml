@@ -51,8 +51,10 @@ script:
   - minikube ip
   - sleep 30
   - curl $(minikube ip)/api/services
-  - curl $(minikube ip)/api/services
+  - curl $(minikube ip)/api/services --output fud.txt
   - ls -alF
+  - cat fud.txt
+
 
 
 
