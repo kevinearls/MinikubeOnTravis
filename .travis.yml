@@ -48,6 +48,8 @@ script:
   # install simple-prod
   - kubectl create --namespace storage --filename https://raw.githubusercontent.com/jaegertracing/jaeger-operator/master/deploy/examples/simple-prod.yaml
   - until kubectl --namespace storage get deployment simple-prod-query --output=jsonpath='{.status.readyReplicas}' | grep --quiet 1; do sleep 1;echo "waiting for travis-example deployment to be available"; kubectl get deployments --namespace storage; done
+  - kubectl get all --all-namespaces
+  - kubectl get ingress --all-namespaces
   - curl $(minikube ip)/api/services
   - curl $(minikube ip)/api/services
 
