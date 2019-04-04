@@ -51,10 +51,13 @@ script:
   - minikube ip
   - sleep 30
   - curl $(minikube ip)/api/services
+  - for i in {1..10}; do curl $(minikube ip)/api/services; echo ""; sleep 2; done
   - curl $(minikube ip)/api/services --output fud.txt
   - ls -alF
-  - cat fud.txt
+  - grep jaeger-query fud.txt
 
 
 
 
+
+  {"data":[""],"total":1,"limit":0,"offset":0,"errors":null}
