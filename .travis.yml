@@ -40,12 +40,17 @@ script:
   #    Wait for it to be ready
   # 4.  Do several gets from url....how do I find it?
   - ./scripts/setupOperator.sh
+  # Install ES; TODO change verification to use statefulset like cassandra
   - kubectl create namespace storage
   - kubectl create --namespace storage --filename https://raw.githubusercontent.com/jaegertracing/jaeger-operator/master/test/elasticsearch.yml
   - JSONPATH='{range .items[*]}{@.metadata.name}:{range @.status.conditions[*]}{@.type}={@.status};{end}{end}'; until kubectl --namespace storage get pods --selector='app=jaeger-elasticsearch' --output jsonpath="$JSONPATH" 2>&1 | grep --quiet "Ready=True"; do sleep 5;echo "waiting for elasticsearch deployment to be available"; kubectl get pods --namespace storage; done
+  # install Cassandra
+  - kubectl create --namespace storage --filename https://raw.githubusercontent.com/jaegertracing/jaeger-operator/master/test/cassandra.yml
+  - until kubectl --namespace storage get statefulset cassandra --output=jsonpath='{.status.readyReplicas}' | grep --quiet 3; do sleep 1;echo "waiting for cassandra to be available"; kubectl get statefulsets --namespace storage; done
+
   # install simple-prod
   - kubectl create --namespace storage --filename https://raw.githubusercontent.com/jaegertracing/jaeger-operator/master/deploy/examples/simple-prod.yaml
-  - until kubectl --namespace storage get deployment simple-prod-query --output=jsonpath='{.status.readyReplicas}' | grep --quiet 1; do sleep 1;echo "waiting for travis-example deployment to be available"; kubectl get deployments --namespace storage; done
+  - until kubectl --namespace storage get deployment simple-prod-query --output=jsonpath='{.status.readyReplicas}' | grep --quiet 1; do sleep 1;echo "waiting for jaeger simple-prod deployment to be available"; kubectl get deployments --namespace storage; done
   - kubectl get all --all-namespaces
   - kubectl get ingress --all-namespaces
   - minikube ip
