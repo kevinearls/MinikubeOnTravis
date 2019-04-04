@@ -29,7 +29,7 @@ script:
   - JSONPATH='{range .items[*]}{@.metadata.name}:{range @.status.conditions[*]}{@.type}={@.status};{end}{end}'; until kubectl -n kube-system get pods -lcomponent=kube-addon-manager -o jsonpath="$JSONPATH" 2>&1 | grep -q "Ready=True"; do sleep 1;echo "waiting for kube-addon-manager to be available"; kubectl get pods --all-namespaces; done
   # Wait for kube-dns to be ready.
   - JSONPATH='{range .items[*]}{@.metadata.name}:{range @.status.conditions[*]}{@.type}={@.status};{end}{end}'; until kubectl -n kube-system get pods -lk8s-app=kube-dns -o jsonpath="$JSONPATH" 2>&1 | grep -q "Ready=True"; do sleep 1;echo "waiting for kube-dns to be available"; kubectl get pods --all-namespaces; done
-  
+
   # TODO
   # 0. Install operator SDK
   # 1. Setup operator
@@ -47,8 +47,10 @@ script:
   - until kubectl --namespace storage get deployment simple-prod-query --output=jsonpath='{.status.readyReplicas}' | grep --quiet 1; do sleep 1;echo "waiting for travis-example deployment to be available"; kubectl get deployments --namespace storage; done
   - kubectl get all --all-namespaces
   - kubectl get ingress --all-namespaces
+  - minikube ip
   - curl $(minikube ip)/api/services
   - curl $(minikube ip)/api/services
+  - ls -alF
 
 
 
