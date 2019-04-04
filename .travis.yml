@@ -30,11 +30,11 @@ jobs:
           - CHANGE_MINIKUBE_NONE_USER=true
           - KUBECONFIG=$HOME/.kube/config
       install:
-        - "chmod +x ./.travis/installOperator.sh"
-        - "chmod +x ./.travis/rune2eTests.sh"
-        - "chmod +x ./.travis/setupMinikube.sh"
+        #- "chmod +x ./.travis/installOperator.sh"
+        #- "chmod +x ./.travis/rune2eTests.sh"
+        #- "chmod +x ./.travis/setupMinikube.sh"
         - "./.travis/setupMinikube.sh"
-        - "./.travis/rune2eTests.sh"
+        #- "./.travis/rune2eTests.sh"
       script:
         - "./.travis/rune2eTests.sh"
 
