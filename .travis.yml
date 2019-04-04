@@ -17,6 +17,8 @@ jobs:
       name: "Build"
       script:
         - "echo 'This is the build stage'"
+        - "ls -alF"
+        - "chmod +x ./travis/*.sh"
     - stage: e2e
       env:
         global:
