@@ -19,6 +19,7 @@ before_script:
   - touch $KUBECONFIG
   - sudo minikube start --vm-driver=none --kubernetes-version=v1.13.0
   - id
+  # TODO is this needed????
   - "sudo chown -R travis: /home/travis/.minikube/"
   - sudo minikube addons enable ingress
 
@@ -27,23 +28,22 @@ script:
   - kubectl cluster-info
   # Verify kube-addon-manager.
   # kube-addon-manager is responsible for managing other kubernetes components, such as kube-dns, dashboard, storage-provisioner..
+  # TODO do we need these?
   - JSONPATH='{range .items[*]}{@.metadata.name}:{range @.status.conditions[*]}{@.type}={@.status};{end}{end}'; until kubectl -n kube-system get pods -lcomponent=kube-addon-manager -o jsonpath="$JSONPATH" 2>&1 | grep -q "Ready=True"; do sleep 1;echo "waiting for kube-addon-manager to be available"; kubectl get pods --all-namespaces; done
   # Wait for kube-dns to be ready.
   - JSONPATH='{range .items[*]}{@.metadata.name}:{range @.status.conditions[*]}{@.type}={@.status};{end}{end}'; until kubectl -n kube-system get pods -lk8s-app=kube-dns -o jsonpath="$JSONPATH" 2>&1 | grep -q "Ready=True"; do sleep 1;echo "waiting for kube-dns to be available"; kubectl get pods --all-namespaces; done
 
   # TODO
   # 0. Install operator SDK
-  # 1. Setup operator
-  # 2. Install ES (and Cassandra?)
-  #    Wait for it to be ready
-  # 3. Install simple-prod
-  #    Wait for it to be ready
-  # 4.  Do several gets from url....how do I find it?
-  - ./scripts/setupOperator.sh
+
+  # Setup Operator
+  - ./scripts/installOperator.sh
   # Install ES; TODO change verification to use statefulset like cassandra
   - kubectl create namespace storage
   - kubectl create --namespace storage --filename https://raw.githubusercontent.com/jaegertracing/jaeger-operator/master/test/elasticsearch.yml
-  - JSONPATH='{range .items[*]}{@.metadata.name}:{range @.status.conditions[*]}{@.type}={@.status};{end}{end}'; until kubectl --namespace storage get pods --selector='app=jaeger-elasticsearch' --output jsonpath="$JSONPATH" 2>&1 | grep --quiet "Ready=True"; do sleep 5;echo "waiting for elasticsearch deployment to be available"; kubectl get pods --namespace storage; done
+  #- JSONPATH='{range .items[*]}{@.metadata.name}:{range @.status.conditions[*]}{@.type}={@.status};{end}{end}'; until kubectl --namespace storage get pods --selector='app=jaeger-elasticsearch' --output jsonpath="$JSONPATH" 2>&1 | grep --quiet "Ready=True"; do sleep 5;echo "waiting for elasticsearch deployment to be available"; kubectl get pods --namespace storage; done
+  - until kubectl --namespace storage get statefulset elasticsearch --output=jsonpath='{.status.readyReplicas}' | grep --quiet 1; do sleep 1;echo "waiting for elasticsearch to be available"; kubectl get statefulsets --namespace storage; done
+
   # install Cassandra
   - kubectl create --namespace storage --filename https://raw.githubusercontent.com/jaegertracing/jaeger-operator/master/test/cassandra.yml
   - until kubectl --namespace storage get statefulset cassandra --output=jsonpath='{.status.readyReplicas}' | grep --quiet 3; do sleep 1;echo "waiting for cassandra to be available"; kubectl get statefulsets --namespace storage; done
@@ -51,10 +51,12 @@ script:
   # install simple-prod
   - kubectl create --namespace storage --filename https://raw.githubusercontent.com/jaegertracing/jaeger-operator/master/deploy/examples/simple-prod.yaml
   - until kubectl --namespace storage get deployment simple-prod-query --output=jsonpath='{.status.readyReplicas}' | grep --quiet 1; do sleep 1;echo "waiting for jaeger simple-prod deployment to be available"; kubectl get deployments --namespace storage; done
+
+  # Confirm we're working
   - kubectl get all --all-namespaces
   - kubectl get ingress --all-namespaces
   - minikube ip
-  - sleep 30
+  #- sleep 30
   - curl $(minikube ip)/api/services
   - for i in {1..10}; do curl $(minikube ip)/api/services; echo ""; sleep 2; done
   - curl $(minikube ip)/api/services --output fud.txt
