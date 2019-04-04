@@ -18,7 +18,10 @@ jobs:
       script:
         - "echo 'This is the build stage'"
         - "ls -alF"
-        - "chmod +x ./travis/*.sh"
+        - "ls -alF .travis"
+        - "chmod +x ./travis/installOperator.sh"
+        - "chmod +x ./travis/rune2eTests.sh"
+        - "chmod +x ./travis/setupMinikube.sh"
     - stage: e2e
       env:
         global:
