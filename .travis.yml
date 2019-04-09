@@ -28,9 +28,9 @@ jobs:
           - CHANGE_MINIKUBE_NONE_USER=true
           - KUBECONFIG=$HOME/.kube/config
       install:
-        - "./.travis/setupMinikube.sh"
+        - "./.travis/create-minikube.sh"
       script:
-        - "./.travis/rune2eTests.sh"
+        - "./.travis/run-node-example.sh"
 
     - stage: deploy
       script: "echo 'This is the deploy stage'"
