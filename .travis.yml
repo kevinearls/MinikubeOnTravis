@@ -1,6 +1,5 @@
 # language: go
 sudo: required
-# We need the systemd for the kubeadm and it's default from 16.04+
 dist: xenial
 
 #go:
@@ -27,6 +26,10 @@ jobs:
           - MINIKUBE_HOME=$HOME
           - CHANGE_MINIKUBE_NONE_USER=true
           - KUBECONFIG=$HOME/.kube/config
+        matrix:
+          - TEST_GROUP=smoke
+          - TEST_GROUP=es
+          - TEST_GROUP=cassandra
       install:
         - "./.travis/create-minikube.sh"
       script:

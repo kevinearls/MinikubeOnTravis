@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -x
 
+env | sort
+
 # Confirm we're working
 kubectl get all --all-namespaces
 minikube ip
