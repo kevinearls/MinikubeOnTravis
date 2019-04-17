@@ -31,9 +31,9 @@ jobs:
           - CHANGE_MINIKUBE_NONE_USER=true
           - KUBECONFIG=$HOME/.kube/config
         matrix:
-          - TEST_GROUP="smoke"
-          - TEST_GROUP="es"
-          - TEST_GROUP="cassandra"
+          - TEST_GROUP=smoke
+          - TEST_GROUP=es
+          - TEST_GROUP=cassandra
 
 
 #    - stage: deploy
