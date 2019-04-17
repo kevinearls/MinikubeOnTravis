@@ -28,8 +28,6 @@ curl -Lo minikube https://storage.googleapis.com/minikube/releases/v0.35.0/minik
     chmod +x minikube &&  \
     sudo mv minikube /usr/local/bin/minikube
 
-env | sort
-
 export MINIKUBE_HOME=$HOME
 export CHANGE_MINIKUBE_NONE_USER=true
 mkdir "${HOME}"/.kube || true
