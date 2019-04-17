@@ -10,7 +10,7 @@ stages:
   - name: e2e
 #  - name: deploy
 
-jobs:
+matrix:
   include:
 #    - stage: build
 #      name: "Build"
