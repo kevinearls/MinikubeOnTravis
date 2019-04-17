@@ -6,16 +6,16 @@ dist: xenial
 #  - 1.11.1
 
 stages:
-  - name: build
+#  - name: build
   - name: e2e
-  - name: deploy
+#  - name: deploy
 
 jobs:
   include:
-    - stage: build
-      name: "Build"
-      script:
-        - "echo 'This is the build stage'"
+#    - stage: build
+#      name: "Build"
+#      script:
+#        - "echo 'This is the build stage'"
 
     - stage: e2e
       #install:
@@ -31,10 +31,10 @@ jobs:
           - CHANGE_MINIKUBE_NONE_USER=true
           - KUBECONFIG=$HOME/.kube/config
         matrix:
-          - TEST_GROUP=smoke
-          - TEST_GROUP=es
-          - TEST_GROUP=cassandra
+          - TEST_GROUP="smoke"
+          - TEST_GROUP="es"
+          - TEST_GROUP="cassandra"
 
 
-    - stage: deploy
-      script: "echo 'This is the deploy stage'"
+#    - stage: deploy
+#      script: "echo 'This is the deploy stage'"
