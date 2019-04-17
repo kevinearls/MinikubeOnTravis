@@ -21,7 +21,7 @@ jobs:
       #install:
       #  - "./.travis/create-minikube.sh"
       #script: "./.travis/run-node-example.sh"
-      script: "./.travis/matrix-test.sh"
+      script: "./.travis/matrix-test.sh $TEST_GROUP"
       env:
         global:
           - CHANGE_MINIKUBE_NONE_USER=true
