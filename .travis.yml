@@ -10,14 +10,13 @@ go:
 #  - name: e2e
 #  - name: deploy
 
-matrix:
-  include:
-    env:
-      - TEST_GROUP=smoke
-      - TEST_GROUP=es
-      - TEST_GROUP=cassandra
+env:
+  matrix:
+    - TEST_GROUP=smoke
+    - TEST_GROUP=es
+    - TEST_GROUP=cassandra
 
-  script: "./.travis/matrix-test.sh $TEST_GROUP"
+script: "./.travis/matrix-test.sh $TEST_GROUP"
 
 #    - stage: deploy
 #      script: "echo 'This is the deploy stage'"
