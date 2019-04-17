@@ -26,6 +26,7 @@ stages:
 
 jobs:
   include:
+    - stage: build
     - stage: e2e
       name: "e2e"
       script: "./.travis/matrix-test.sh $TEST_GROUP"
