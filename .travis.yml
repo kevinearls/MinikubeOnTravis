@@ -5,18 +5,47 @@ dist: xenial
 go:
   - 1.11.1
 
-#stages:
+stages:
 #  - name: build
-#  - name: e2e
+  - name: e2e
 #  - name: deploy
 
-env:
-  matrix:
-    - TEST_GROUP=smoke
-    - TEST_GROUP=es
-    - TEST_GROUP=cassandra
 
-script: "./.travis/matrix-test.sh $TEST_GROUP"
+jobs:
+  include:
+#    - stage: build
+#      name: "Build"
+#      script:
+#        - "echo 'This is the build stage'"
+
+    - stage: e2e
+      env:
+        global:
+          - CHANGE_MINIKUBE_NONE_USER=true
+          - MINIKUBE_WANTUPDATENOTIFICATION=false
+          - MINIKUBE_WANTREPORTERRORPROMPT=false
+          - MINIKUBE_HOME=$HOME
+          - CHANGE_MINIKUBE_NONE_USER=true
+          - KUBECONFIG=$HOME/.kube/config
+        matrix:
+          - TEST_GROUP=es
+          - TEST_GROUP=smoke
+      script: "./.travis/matrix-test.sh $TEST_GROUP"
 
 #    - stage: deploy
 #      script: "echo 'This is the deploy stage'"
+
+
+
+
+#env:
+#  matrix:
+##    - TEST_GROUP=smoke
+#    - TEST_GROUP=es
+#    - TEST_GROUP=cassandra
+
+#script: "./.travis/matrix-test.sh $TEST_GROUP"
+
+#    - stage: deploy
+#      script: "echo 'This is the deploy stage'"
+
