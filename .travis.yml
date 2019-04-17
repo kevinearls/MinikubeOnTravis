@@ -10,6 +10,15 @@ stages:
   - name: e2e
   - name: deploy
 
+env:
+  global:
+    - CHANGE_MINIKUBE_NONE_USER=true
+    - MINIKUBE_WANTUPDATENOTIFICATION=false
+    - MINIKUBE_WANTREPORTERRORPROMPT=false
+    - MINIKUBE_HOME=$HOME
+    - CHANGE_MINIKUBE_NONE_USER=true
+    - KUBECONFIG=$HOME/.kube/config
+
 jobs:
   include:
     - stage: build
@@ -28,3 +37,8 @@ jobs:
 
     - stage: deploy
       script: "echo 'This is the deploy stage'"
+
+notifications:
+  email:
+    on_failure: never
+    on_success: never

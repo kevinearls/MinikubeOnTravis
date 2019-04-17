@@ -9,3 +9,4 @@ set -u
 set -x
 
 echo "I was run with ${TEST_GROUP}"
+env | grep KUBE
