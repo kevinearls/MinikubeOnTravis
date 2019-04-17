@@ -12,9 +12,9 @@ go:
 
 env:
   matrix:
-    - TEST_GROUP=smoke
-    - TEST_GROUP=es
-    - TEST_GROUP=cassandra
+    - TEST_STUPID=smoke
+    - TEST_STUPID=es
+    - TEST_STUPID=cassandra
 
 #script: "./.travis/matrix-test.sh $TEST_GROUP"
 
@@ -29,4 +29,8 @@ jobs:
     - stage: build
     - stage: e2e
       name: "e2e"
+      env:
+        matrix:
+          - TEST_GROUP=fred
+          - TEST_GROUP=barney
       script: "./.travis/matrix-test.sh $TEST_GROUP"

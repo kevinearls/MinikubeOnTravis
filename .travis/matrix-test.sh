@@ -8,4 +8,4 @@ set -u
 # print each command before executing it
 set -x
 
-env | sort
+echo "I was run with ${TEST_GROUP}
