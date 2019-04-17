@@ -5,32 +5,26 @@ dist: xenial
 go:
   - 1.11.1
 
-#stages:
-#  - name: build
-#  - name: e2e
-#  - name: deploy
-
-env:
-  matrix:
-    - TEST_STUPID=smoke
-    - TEST_STUPID=es
-    - TEST_STUPID=cassandra
-
-#script: "./.travis/matrix-test.sh $TEST_GROUP"
-
-#    - stage: deploy
-#      script: "echo 'This is the deploy stage'"
-
 stages:
-  - e2e
+  - name: build
+  - name: e2e
+  - name: deploy
 
 jobs:
   include:
     - stage: build
+      name: "Build"
+      script: "echo 'This is the build stage'"
+
     - stage: e2e
-      name: "e2e"
-      env:
-        matrix:
-          - TEST_GROUP=fred
-          - TEST_GROUP=barney
-      script: "./.travis/matrix-test.sh $TEST_GROUP"
+      script: "./.travis/matrix-test.sh"
+      env: TEST_GROUP=es
+    - stage: e2e
+      script: "./.travis/matrix-test.sh"
+      env: TEST_GROUP=smoke
+    - stage: e2e
+      script: "./.travis/matrix-test.sh"
+      env: TEST_GROUP=cassandra
+
+    - stage: deploy
+      script: "echo 'This is the deploy stage'"
